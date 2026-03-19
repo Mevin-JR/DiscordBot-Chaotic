@@ -11,6 +11,7 @@ A modular, production-ready Discord bot built with Node.js and discord.js v14.
   - `.ban`, `.kick`, `.mute` (timeouts), and `.role` management.
 - **Chaos Feature:** 
   - `.drag` - Rapidly moves a self-muted or self-deafened user across randomly selected voice channels every 2.5 seconds until they unmute or undeafen. Requires the designated allowed role.
+  - `.stopdrag` - Manually forces a dragged user to return to their original channel, canceling the chaos cycle. Requires the designated allowed role.
 - **General Menu:**
   - `.help` - Displays a dynamic list of all available commands.
 
