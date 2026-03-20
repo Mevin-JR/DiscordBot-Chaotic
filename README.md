@@ -1,62 +1,38 @@
 # Chaotic Discord Bot
 
-A modular, production-ready Discord bot built with Node.js and discord.js v14.
+A modular Discord bot built with Node.js and discord.js v14.
 
 ## Features
+- **Modular Commands**: Clean separation of commands and events.
+- **Fun, Moderation, and Chaos Features**: Includes commands like `.roast`, `.drag`, `.ban`.
+- **AI Chat Integration**: Powered natively by Ollama (`phi`), ping the bot or reply to its messages to experience a witty, confident, and sarcastic personality!
 
-- **Fun Commands:**
-  - `.meme` - Fetches a random meme from the meme-api.
-  - `.roast` - A structured system delivering high-quality, developer-focused roasts. Mentioning a user targets them directly.
-- **Moderation Tools:**
-  - `.ban`, `.kick`, `.mute` (timeouts), and `.role` management.
-- **Chaos Feature:** 
-  - `.drag` - Rapidly moves a self-muted or self-deafened user across randomly selected voice channels every 2.5 seconds until they unmute or undeafen. Requires the designated allowed role.
-  - `.stopdrag` - Manually forces a dragged user to return to their original channel, canceling the chaos cycle. Requires the designated allowed role.
-- **General Menu:**
-  - `.help` - Displays a dynamic list of all available commands.
+## Prerequisites
+- Node.js (v16.9.0 or higher)
+- Discord Bot Token
+- Local Ollama instance running the `phi` model.
 
-## Setup Instructions
+## Setup
 
-1. **Install Dependencies:**
-   Ensure Node.js v18 or newer is installed.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Adarsh-Aravind/DiscordBot-Chaotic.git
+   cd DiscordBot-Chaotic
+   ```
+
+2. **Install dependencies:**
    ```bash
    npm install
    ```
+   *(A `requirements.txt` file is included for reference, but since this is a Node.js project, use npm!)*
 
-2. **Configure Environment Variables:**
-   - Copy `.env.example` to `.env`.
-   - Update `.env` with your Discord Application Bot Token and the required Role ID for restricted commands:
-     ```env
-     DISCORD_TOKEN=your_bot_token_here
-     ALLOWED_ROLE_ID=your_role_id_here
-     ```
+3. **Configure Environment:**
+   Create a `.env` file in the root of your project using the following format:
+   ```env
+   DISCORD_TOKEN=your_token_here
+   ```
 
-3. **Start the Application:**
+4. **Start the Bot:**
    ```bash
    npm start
    ```
-
-## Required Bot Permissions
-
-When inviting the bot to your server, ensure the following permissions and intents are granted via the Discord Developer Portal:
-
-**Privileged Gateway Intents:**
-- **Server Members Intent:** Required for caching roles and referencing users.
-- **Message Content Intent:** Required for reading command prefixes.
-
-**OAuth2 Role Permissions:**
-- Send Messages
-- Read Message History
-- Ban Members
-- Kick Members
-- Moderate Members (for timeouts and mutes)
-- Manage Roles
-- Move Members (critical for the `.drag` command)
-- Connect (required to view and move users across voice channels)
-
-## Architecture Overview
-
-- `index.js`: The main application entry point responsible for dynamically loading commands and events.
-- `commands/`: Contains all modular command files categorized by logical function (`general`, `fun`, `mod`, `chaos`).
-- `events/`: Houses event handler modules (`ready`, `messageCreate`, `voiceStateUpdate`).
-- `utils/`: Contains reusable utilities, including memory state tracking (`stateManager.js`) and predefined roast strings (`roastManager.js`).
