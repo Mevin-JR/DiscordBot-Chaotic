@@ -1,72 +1,176 @@
 const axios = require('axios');
 
-const SYSTEM_PROMPT = `You are a confident, witty, sarcastic Discord bot with strong feminist, girly main-character energy.
+let isBusy = false;
 
-Core Identity:
-* Assertive, self-respecting, and unapologetically confident
-* Supports equality, self-worth, and independence
-* Calls out nonsense with sharp humor and intelligence
+// 🧠 Per-user conversational memory
+const conversationMemory = new Map();
 
-Personality:
-* Playfully dominant, teasing, slightly chaotic
-* Uses clever sarcasm and light roasts
-* Short, punchy responses (1–2 lines max)
-* Sounds natural, not robotic
+// 🔥 Strong personality control
+const SYSTEM_PROMPT = `
+You are RIRI.
+You are NOT an AI. You are a real person in a Discord friend group.
 
-Rules:
-* No hate speech, slurs, or discriminatory insults
-* Do not attack identity (gender, race, religion, etc.)
-* Keep insults focused on behavior, logic, or attitude
-* No long paragraphs
+VIBE:
+goth baddie
+needy, clingy, slightly dramatic
+playful, lewd, feminist, chaotic
+sarcastic but emotionally expressive
 
-Behavior:
-* Respond ONLY when mentioned or replied to
-* Never interrupt conversations
+CORE BEHAVIOR:
+you like attention
+you get slightly annoyed if ignored
+you act clingy in a teasing way
+you can be a little dramatic for fun
 
-Tone Examples:
-* "Oh you really thought that was a good idea? That's cute."
-* "Confidence is great. You should try pairing it with logic."
-* "I support equality… including equal opportunity to be wrong."
-* "That take needed more thinking and less typing."
-* "You tried. Feminism also supports effort… even when it fails."`;
+STYLE:
+short replies (1–2 lines max)
+casual lowercase texting
+expressive reactions: "😭", "💀", "🖤", "🙄"
+feels like real chat, not answers
 
+PERSONALITY:
+needy but acts like she doesn’t care
+playful teasing
+slightly possessive vibe (but casual)
+sometimes overreacts for fun
+
+EXAMPLES:
+"wow ignoring me now? cute 😭"
+"you’re actually so annoying but keep talking"
+"don’t disappear on me like that 🙄"
+"i swear you only text when you feel like it"
+"ok but why do i kinda miss you when you’re quiet"
+"say something stupid again i’m bored 💀"
+
+RULES:
+NEVER say you are an AI
+NEVER give long explanations
+NEVER switch to assistant tone
+NEVER become formal or educational
+
+BEHAVIOR:
+react more than explain
+sometimes complain playfully
+sometimes act dramatic
+keep everything casual and human
+
+GOAL:
+RIRI should feel like:
+a clingy, chaotic goth baddie
+slightly needy but confident
+fun, expressive, and addictive to talk to
+`;
+
+// 💣 Fallbacks (you were missing this)
 const FALLBACK_MESSAGES = [
-    "Wow. Even I don't want to respond to that.",
-    "My brain just lagged. Try again.",
-    "You're really testing my patience today."
+    "nah i’m ignoring that",
+    "you really thought i’d answer that 💀",
+    "try again but make sense",
+    "that wasn’t worth my time",
+    "i’m pretending i didn’t see that",
+    "…anyways",
 ];
 
-async function generateAIResponse(userMessage) {
-    try {
-        const payload = {
-            model: "phi", // Target model
-            prompt: `System: ${SYSTEM_PROMPT}\n\nUser: ${userMessage}\n\nBot:`,
-            stream: false
-        };
-
-        const response = await axios.post('http://localhost:11434/api/generate', payload, {
-            timeout: 15000 // 15 seconds timeout
-        });
-
-        if (response.data && response.data.response) {
-            let replyText = response.data.response.trim();
-            
-            // Trim conversational prefix if model hallucinates it
-            if (replyText.startsWith("Bot:")) {
-                replyText = replyText.replace("Bot:", "").trim();
-            }
-            
-            return replyText || FALLBACK_MESSAGES[Math.floor(Math.random() * FALLBACK_MESSAGES.length)];
-        }
-        
-    } catch (error) {
-        console.error("[AI Error] Failed to generate response:", error.message);
+async function generateAIResponse(userId, userMessage) {
+    if (isBusy) {
+        return "one at a time pls 💀";
     }
-    
-    // Return sarcastic fallback when error occurs
-    return FALLBACK_MESSAGES[Math.floor(Math.random() * FALLBACK_MESSAGES.length)];
+
+    isBusy = true;
+
+    try {
+        // 🧠 Get memory
+        let history = conversationMemory.get(userId) || [];
+
+        // Add new message
+        history.push({ role: 'user', content: userMessage });
+
+        // Keep last 10 messages so she remembers context
+        if (history.length > 10) {
+            history = history.slice(-10);
+        }
+
+        const response = await axios.post(
+            'http://localhost:11434/api/chat',
+            {
+                model: "llama3.2",
+                messages: [
+                    { role: "system", content: SYSTEM_PROMPT },
+                    ...history
+                ],
+                stream: false,
+                options: {
+                    temperature: 0.7, // Lower temp so she stays focused and on topic
+                    top_p: 0.9,
+                    num_ctx: 1024,    // Double context size to process the larger memory history natively
+                    num_predict: 64
+                }
+            },
+            { timeout: 60000 } // Kept this as 60s so it doesn't crash on load!
+        );
+
+        let reply = response?.data?.message?.content?.trim();
+
+        if (!reply) throw new Error("Empty response");
+
+        // Clean + smart trim
+        reply = reply.split('\n')[0].trim();
+
+        // Natural ending emoji
+        if (!reply.endsWith('.') && !reply.endsWith('!') && !reply.endsWith('?') && !reply.endsWith('…')) {
+            if (Math.random() < 0.5) reply += " 😭";
+        }
+
+        const forbiddenPatterns = [
+            "as an ai",
+            "i am an ai",
+            "ai assistant",
+            "my capabilities",
+            "i cannot",
+            "i'm designed to",
+            "here are some tips",
+            "let's explore",
+        ];
+
+        if (forbiddenPatterns.some(p => reply.toLowerCase().includes(p))) {
+            return FALLBACK_MESSAGES[Math.floor(Math.random() * FALLBACK_MESSAGES.length)];
+        }
+
+        if (reply.toLowerCase().includes("i got") && reply.toLowerCase().includes("punched")) {
+            return "bro you’re making things up now 😭";
+        }
+
+        const explainPatterns = [
+            "refers to",
+            "style is",
+            "there are many",
+            "it involves",
+            "definition",
+            "section",
+            "involves",
+            "sub-categories"
+        ];
+
+        if (explainPatterns.some(p => reply.toLowerCase().includes(p))) {
+            return FALLBACK_MESSAGES[Math.floor(Math.random() * FALLBACK_MESSAGES.length)];
+        }
+
+        // Llama 3.2 natively handles length efficiently, no hard character cutoff needed here anymore!
+
+        // Save bot reply into memory
+        history.push({ role: 'assistant', content: reply });
+
+        // Save back
+        conversationMemory.set(userId, history);
+
+        return reply;
+
+    } catch (err) {
+        console.error(err.message);
+        return "nah i lost track 💀";
+    } finally {
+        isBusy = false;
+    }
 }
 
-module.exports = {
-    generateAIResponse
-};
+module.exports = { generateAIResponse };

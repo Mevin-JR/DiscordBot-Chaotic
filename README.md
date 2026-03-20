@@ -5,12 +5,12 @@ A modular Discord bot built with Node.js and discord.js v14.
 ## Features
 - **Modular Commands**: Clean separation of commands and events.
 - **Fun, Moderation, and Chaos Features**: Includes commands like `.roast`, `.drag`, `.ban`.
-- **AI Chat Integration**: Powered natively by Ollama (`phi`), ping the bot or reply to its messages to experience a witty, confident, and sarcastic personality!
+- **AI Chat Integration (Riri)**: Powered natively by Ollama (`Llama 3.2 3B Instruct Abliterated`). Simply ping the bot or reply to its messages to experience Riri, an intelligent, chaotic, and heavily customized goth baddie persona with complete conversational memory!
 
 ## Prerequisites
 - Node.js (v16.9.0 or higher)
 - Discord Bot Token
-- Local Ollama instance running the `phi` model.
+- Local Ollama instance running `hf.co/bartowski/Llama-3.2-3B-Instruct-GGUF` (or your preferred Llama 3.2 3B Abliterated variant).
 
 ## Setup
 
