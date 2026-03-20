@@ -90,12 +90,15 @@ async function generateAIResponse(userId, userMessage) {
             history = history.slice(-10);
         }
 
+        const moods = ["normal", "annoyed", "clingy"];
+        const mood = moods[Math.floor(Math.random() * moods.length)];
+
         const response = await axios.post(
             'http://localhost:11434/api/chat',
             {
                 model: "llama3.2:3b",
                 messages: [
-                    { role: "system", content: SYSTEM_PROMPT },
+                    { role: "system", content: SYSTEM_PROMPT + `\n\nCURRENT MOOD: ${mood}\nLet this mood subtly influence your next reply.` },
                     ...history
                 ],
                 stream: false,
@@ -103,7 +106,7 @@ async function generateAIResponse(userId, userMessage) {
                     temperature: 0.7, // Lower temp so she stays focused and on topic
                     top_p: 0.9,
                     num_ctx: 1024,    // Double context size to process the larger memory history natively
-                    num_predict: 64
+                    num_predict: 40
                 }
             },
             { timeout: 60000 } // Kept this as 60s so it doesn't crash on load!
