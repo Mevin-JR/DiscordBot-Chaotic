@@ -10,7 +10,7 @@ A modular Discord bot built with Node.js and discord.js v14.
 ## Prerequisites
 - Node.js (v16.9.0 or higher)
 - Discord Bot Token
-- Local Ollama instance running `hf.co/bartowski/Llama-3.2-3B-Instruct-GGUF` (or your preferred Llama 3.2 3B Abliterated variant).
+- Local Ollama instance running `llama3.2:3b` or your preferred variant.
 
 ## Setup
 

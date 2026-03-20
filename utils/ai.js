@@ -93,7 +93,7 @@ async function generateAIResponse(userId, userMessage) {
         const response = await axios.post(
             'http://localhost:11434/api/chat',
             {
-                model: "llama3.2",
+                model: "llama3.2:3b",
                 messages: [
                     { role: "system", content: SYSTEM_PROMPT },
                     ...history
