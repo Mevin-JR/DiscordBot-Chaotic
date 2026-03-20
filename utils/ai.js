@@ -1,9 +1,9 @@
 const axios = require('axios');
 
-let isBusy = false;
-
 // 🧠 Per-user conversational memory
 const conversationMemory = new Map();
+// 🔒 Per-user active generation lock
+const userBusy = new Map();
 
 // 🔥 Strong personality control
 const SYSTEM_PROMPT = `
@@ -72,11 +72,11 @@ const FALLBACK_MESSAGES = [
 ];
 
 async function generateAIResponse(userId, userMessage) {
-    if (isBusy) {
-        return "one at a time pls 💀";
+    if (userBusy.get(userId)) {
+        return "wait… let me finish 😭";
     }
 
-    isBusy = true;
+    userBusy.set(userId, true);
 
     try {
         // 🧠 Get memory
@@ -169,7 +169,7 @@ async function generateAIResponse(userId, userMessage) {
         console.error(err.message);
         return "nah i lost track 💀";
     } finally {
-        isBusy = false;
+        userBusy.set(userId, false);
     }
 }
 
