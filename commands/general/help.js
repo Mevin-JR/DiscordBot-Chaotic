@@ -15,6 +15,12 @@ module.exports = {
             embed.addFields({ name: `.${cmd.name}`, value: cmd.description, inline: false });
         });
 
+        embed.addFields({ 
+            name: `✨ AI Chat Feature`, 
+            value: `Mention me \`@Bot\` or reply to one of my messages to chat with my chaotic, sarcastic personality!`, 
+            inline: false 
+        });
+
         await message.reply({ embeds: [embed] });
     },
 };
