@@ -1,14 +1,15 @@
-const fetch = require('node-fetch');
+﻿const fetch = require('node-fetch');
 
+// 🧠 Keep model warm without killing your system
 setInterval(() => {
   fetch("http://192.168.0.126:11434/api/generate", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "llama3.2:3b",
+      model: "phi",
       prompt: "ping",
-      num_predict: 1,
+      num_predict: 5,
       stream: false
     })
-  }).catch(()=>{});
-}, 5000); 
+  }).catch(() => {});
+}, 120000);
