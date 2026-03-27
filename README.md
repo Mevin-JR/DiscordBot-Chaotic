@@ -15,6 +15,15 @@ A modular, production-ready Discord bot built with Node.js and discord.js v14.
 ### Moderation Tools
 - `.ban`, `.kick`, `.mute` (timeouts), `.role`
 
+### F1 Commands (Ergast API Integration)
+- `.f1` - Current season Drivers/Constructors and Next Race summary.
+- `.f1next` - Detailed next race and circuit info.
+- `.f1last` - Last completed race results and podium.
+- `.f1dri` / `.f1con` - Top 10 Drivers and Constructors standings.
+- `.f1cal` - Full season calendar.
+- `.f1c <circuit>` - Search for a specific circuit & view the previous winner.
+- `.f1res <round>` - Results for a specific race round this season.
+
 ### Chaos Features
 - `.drag` - Moves muted/deafened users across voice channels periodically
 - `.stopdrag` - Stops dragging and restores original state
