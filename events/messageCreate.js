@@ -1,4 +1,3 @@
-const { generateAIResponse } = require('../utils/ai');
 
 module.exports = {
     name: 'messageCreate',
@@ -72,54 +71,5 @@ module.exports = {
             }
         }
 
-        // Skip AI if command ran
-        if (isCommandHandled) return;
-
-        // =========================
-        // AI TRIGGER LOGIC
-        // =========================
-        const isMentioned = message.mentions.has(client.user);
-
-        let isReplyToBot = false;
-        if (message.reference?.messageId) {
-            try {
-                const repliedMessage = await message.channel.messages.fetch(message.reference.messageId);
-                if (repliedMessage.author.id === client.user.id) {
-                    isReplyToBot = true;
-                }
-            } catch (err) {
-                console.error("[AI Error] Reply fetch failed:", err.message);
-            }
-        }
-
-        if (!isMentioned && !isReplyToBot) return;
-
-        // =========================
-        // CLEAN INPUT
-        // =========================
-        let cleanContent = message.content
-            .replace(new RegExp(`<@!?${client.user.id}>`, 'g'), '')
-            .trim();
-
-        if (!cleanContent) {
-            return message.reply("Use words. I'm not decoding silence.");
-        }
-
-        if (Math.random() < 0.15) return;      // 👻 15% chance to just leave them on read
-
-        // =========================
-        // AI RESPONSE
-        // =========================
-        try {
-            await message.channel.sendTyping();
-            await new Promise(res => setTimeout(res, 800 + Math.random() * 1200)); // ⏳ Human-like typing delay
-
-            const response = await generateAIResponse(message.author.id, cleanContent);
-
-            return message.reply(response);
-        } catch (error) {
-            console.error("[AI CHAT ERROR]:", error);
-            return message.reply("Ugh. Even I gave up on that one.");
-        }
     },
 };
