@@ -2,7 +2,7 @@ const roastManager = require('../../utils/roastManager');
 
 module.exports = {
     name: 'roast',
-    description: 'Delivers a brutal developer roast. Optionally mention a user.',
+    description: 'Delivers a brutal roast. Optionally mention a user.',
     async execute(message, args) {
         const roast = roastManager.getRandomRoast();
         const target = message.mentions.users.first();
