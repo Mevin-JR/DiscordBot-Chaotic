@@ -11,6 +11,7 @@ A modular, production-ready Discord bot built with Node.js and discord.js v14.
 ### Fun Commands
 - `.meme` - Fetches a random meme from meme-api
 - `.roast` - Developer-style roast system with user targeting
+- `.tt` - Role-restricted CS:GO / Valorant toxic trash talk generator (fetches dynamically from external repo)
 
 ### Moderation Tools
 - `.ban`, `.kick`, `.mute` (timeouts), `.role`
