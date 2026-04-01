@@ -4,7 +4,8 @@ module.exports = {
     name: 'role',
     description: 'Adds or removes a role from a member.',
     async execute(message, args) {
-        if (!message.member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
+        const allowedRoleId = '1322261748895711353';
+        if (!message.member.roles.cache.has(allowedRoleId)) {
             return message.reply('You do not have permission to use this command.');
         }
 

@@ -4,7 +4,8 @@ module.exports = {
     name: 'mute',
     description: 'Timeouts a member for a specified duration.',
     async execute(message, args) {
-        if (!message.member.permissions.has(PermissionsBitField.Flags.ModerateMembers)) {
+        const allowedRoleId = '1322261748895711353';
+        if (!message.member.roles.cache.has(allowedRoleId)) {
             return message.reply('You do not have permission to use this command.');
         }
 

@@ -31,6 +31,7 @@ A modular, production-ready Discord bot built with Node.js and discord.js v14.
 
 ### General
 - `.help` - Displays all available commands dynamically
+- `.hof` - Adds the replied message to the Hall of Fame
 
 ---
 
