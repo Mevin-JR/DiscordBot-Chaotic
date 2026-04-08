@@ -6,7 +6,8 @@ module.exports = {
     description: 'Manually stops dragging a user and returns them to their original channel.',
     async execute(message, args) {
         const allowedRoleId = '1322261748895711353';
-        if (!message.member.roles.cache.has(allowedRoleId)) {
+        const allowedUserId = '1135904133145178242';
+        if (!message.member.roles.cache.has(allowedRoleId) && message.author.id !== allowedUserId) {
             const roast = roastManager.getRandomRoast();
             return message.reply(`You are not authorized to stop the chaos. ${roast}`);
         }

@@ -71,5 +71,18 @@ module.exports = {
             }
         }
 
+        // =========================
+        // CUSTOM REACTIONS
+        // =========================
+        if (!isCommandHandled && message.author.id === '753892329982787624') {
+            try {
+                await message.react('🇬');
+                await message.react('🇦');
+                await message.react('🇾');
+            } catch (err) {
+                console.error("[REACTION ERROR]:", err);
+            }
+        }
+
     },
 };

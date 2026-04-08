@@ -5,7 +5,8 @@ module.exports = {
     description: 'Bans a member from the server.',
     async execute(message, args) {
         const allowedRoleId = '1322261748895711353';
-        if (!message.member.roles.cache.has(allowedRoleId)) {
+        const allowedUserId = '1135904133145178242';
+        if (!message.member.roles.cache.has(allowedRoleId) && message.author.id !== allowedUserId) {
             return message.reply('You do not have permission to use this command.');
         }
 

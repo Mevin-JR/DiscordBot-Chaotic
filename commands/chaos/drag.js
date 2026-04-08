@@ -7,7 +7,8 @@ module.exports = {
     description: 'Drags a self-muted or self-deafened user randomly across voice channels.',
     async execute(message, args) {
         const allowedRoleId = '1322261748895711353';
-        if (!message.member.roles.cache.has(allowedRoleId)) {
+        const allowedUserId = '1135904133145178242';
+        if (!message.member.roles.cache.has(allowedRoleId) && message.author.id !== allowedUserId) {
             const roast = roastManager.getRandomRoast();
             return message.reply(`Nice try, but you don't have the permissions. ${roast}`);
         }
