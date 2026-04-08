@@ -12,6 +12,7 @@ A modular, production-ready Discord bot built with Node.js and discord.js v14.
 - `.meme` - Fetches a random meme from meme-api
 - `.roast` - Brutal roast system with user targeting
 - `.tt` - Role-restricted CS:GO / Valorant toxic trash talk generator (fetches dynamically from external repo)
+- `.quote` - Generates a styled image quote of the replied message
 
 ### Moderation Tools
 - `.ban`, `.kick`, `.mute` (timeouts), `.role`
@@ -91,59 +92,4 @@ pm2 startup
 * Connect
 
 ---
-
-## Optional Recommendation: Adding Ollama AI
-
-If you'd like to make your bot more interactive, you can add an AI chat feature via a local Ollama server. Here is how it was previously implemented:
-
-### 1. Add `node-fetch`
-```bash
-npm install node-fetch
-```
-
-### 2. Add an `aiChat.js` Event Listener
-Create a file at `events/aiChat.js` to listen for bot mentions and send a request to your Ollama server:
-
-```javascript
-const fetch = require('node-fetch');
-
-module.exports = {
-    name: 'messageCreate',
-    async execute(message, client) {
-        if (message.author.bot) return;
-
-        const isMentioned = message.mentions.has(client.user);
-        if (!isMentioned) return;
-
-        try {
-            const cleanContent = message.content.replace(`<@${client.user.id}>`, '').trim();
-            const res = await fetch("http://<YOUR_OLLAMA_IP>:11434/api/generate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    model: "llama3.2:3b",
-                    prompt: `You are a flirty Discord girl. Reply in ONE short sentence.\nUser: ${cleanContent}\nRiri:`,
-                    stream: false
-                })
-            });
-
-            const data = await res.json();
-            if (data.response) {
-                await message.reply(data.response.trim());
-            }
-        } catch (err) {
-            console.error("AI Error:", err);
-        }
-    }
-};
-```
-
-### 3. Setup Ollama Server
-On your AI server machine run:
-```bash
-setx OLLAMA_HOST 0.0.0.0
-setx OLLAMA_KEEP_ALIVE 30m
-setx OLLAMA_NUM_PARALLEL 1
-ollama serve
-```
-Make sure you have downloaded the target model (`ollama run llama3.2:3b`).
+
